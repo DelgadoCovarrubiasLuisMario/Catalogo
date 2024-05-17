@@ -1,0 +1,43 @@
+﻿@page "/clasificaciones/personas/{Id:int}"
+@inject IRepositorioClasificaciones _repositorio
+@inject NavigationManager _navigator
+@if (_clasificacion.Personas == null || _clasificacion.Personas.Count == 0)
+{
+    <h3>No existen personas registradas</h3>
+}
+else
+{
+    <h3>Personas de la clasificación @_clasificacion.Name</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Persona persona in _clasificacion.Personas)
+            {
+                <tr>
+                    <td>@persona.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code 
+{
+    [Parameter]
+    public int Id { get; set; }
+    private Clasificacion _clasificacion = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id > 0)
+        {
+            _clasificacion = await _repositorio.GetClasificacion(Id);
+        }
+    }
+
+}
+}
